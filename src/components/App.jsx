@@ -1,68 +1,58 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import Description from "./Description/Description";
-import Options from "./Options/Options";
-import Feedback from "./Feedback/Feedback";
-import Notification from "./Notification/Notification";
-
-const getValues = () => {
-  const defaultValues = { good: 0, neutral: 0, bad: 0 };
-  const localValues = localStorage.getItem("feedbackValues");
-  if (localValues) {
-    try {
-      return JSON.parse(localValues);
-    } catch (error) {
-      console.error("Error parsing localStorage data:", error);
-      localStorage.setItem("feedbackValues", JSON.stringify(defaultValues));
-      return defaultValues;
-    }
-  } else {
-    localStorage.setItem("feedbackValues", JSON.stringify(defaultValues));
-    return defaultValues;
-  }
-};
+import ContactForm from "./ContactForm/ContactForm";
+import ContactList from "./ContactList/ContactList";
+import SearchBox from "./SearchBox/SearchBox";
+import { useEffect, useState } from "react";
+import contactsList from "../contacts.json";
+import { nanoid } from "nanoid";
 
 export default function App() {
-  const [feedback, setFeedback] = useState(getValues);
+  const [inputValue, setInputValue] = useState("");
+  const [contacts, setContacts] = useState(() => {
+    const savedContacts = window.localStorage.getItem("saved-contacts");
+    if (savedContacts !== null) {
+      return JSON.parse(savedContacts);
+    }
+    return contactsList;
+  });
 
-  const updateFeedback = (type) => {
-    setFeedback((prevFeedback) => ({
-      ...prevFeedback,
-      [type]: prevFeedback[type] + 1,
-    }));
-  };
-
-  const resetFeedback = () => {
-    const defaultValues = { good: 0, neutral: 0, bad: 0 };
-    localStorage.setItem("feedbackValues", JSON.stringify(defaultValues));
-
-    setFeedback(defaultValues);
-  };
-
-  const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
   useEffect(() => {
-    localStorage.setItem("feedbackValues", JSON.stringify(feedback));
-  }, [feedback]);
+    window.localStorage.setItem("saved-contacts", JSON.stringify(contacts));
+  }, [contacts]);
 
-  const positiveFeedback = Math.round((feedback.good / totalFeedback) * 100);
+  const handleChange = (evt) => {
+    setInputValue(evt.target.value);
+  };
+
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLowerCase().includes(inputValue.toLowerCase())
+  );
+
+  const handleAddContact = (newContact) => {
+    setContacts((prevContacts) => [
+      ...prevContacts,
+      {
+        ...newContact,
+        id: nanoid(10),
+      },
+    ]);
+  };
+
+  const handleDeleteContact = (contactId) => {
+    setContacts((prevContacts) =>
+      prevContacts.filter((contact) => contact.id !== contactId)
+    );
+  };
 
   return (
     <>
-      <Description />
-      <Options
-        updateFeedback={updateFeedback}
-        totalFeedback={totalFeedback}
-        resetFeedback={resetFeedback}
+      <h1>Phonebook</h1>
+      <ContactForm onAddContact={handleAddContact} />
+      <SearchBox inputValue={inputValue} handleChange={handleChange} />
+      <ContactList
+        contacts={filteredContacts}
+        onDeleteContact={handleDeleteContact}
       />
-      {totalFeedback > 0 ? (
-        <Feedback
-          feedback={feedback}
-          totalFeedback={totalFeedback}
-          positiveFeedback={positiveFeedback}
-        />
-      ) : (
-        <Notification />
-      )}
     </>
   );
 }

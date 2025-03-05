@@ -1,0 +1,33 @@
+.formItem {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.contactForm {
+  border-color: black;
+  border-radius: 5px;
+  padding: 5px 10px;
+  overflow: hidden;
+  outline: none;
+  border-width: 1.5px;
+  border-style: solid;
+  width: 100%;
+  @media screen and (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media screen and (min-width: 1280px) {
+    width: 25%;
+  }
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+
+.formField {
+  height: 40px;
+}

@@ -1,0 +1,28 @@
+.contactCard {
+  border-color: black;
+  border-radius: 5px;
+  padding: 5px 10px;
+  overflow: hidden;
+  outline: none;
+  border-width: 1.5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-style: solid;
+}
+
+.info {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+
+.infoWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoText {
+  margin: 5px;
+}

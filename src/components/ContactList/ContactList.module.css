@@ -1,0 +1,15 @@
+.wrapper {
+  display: grid;
+
+  gap: 20px;
+  grid-template-columns: 1fr;
+  padding: 0px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 1280px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

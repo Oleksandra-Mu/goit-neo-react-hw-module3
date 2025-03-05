@@ -1,0 +1,19 @@
+.searchInput {
+  border-color: gray;
+  border-radius: 5px;
+  overflow: hidden;
+  outline: none;
+  border-width: 1.5px;
+  width: 100%;
+  height: 40px;
+  @media screen and (min-width: 768px) {
+    width: 50%;
+  }
+
+  @media screen and (min-width: 1280px) {
+    width: 25%;
+  }
+}
+.searchInput:active {
+  border-color: rgb(105, 105, 105);
+}
